@@ -129,7 +129,37 @@ QUnit.test( "isInclude_abc3Seq", function( assert ) {
 });
 
 
+QUnit.test( "isInclude_specialChar", function( assert ) {
+    assert.notOk(s1.isInclude_specialChar("a"));
+    assert.notOk(s1.isInclude_specialChar("ab"));
+    assert.ok(s1.isInclude_specialChar("#"));
+    assert.ok(s1.isInclude_specialChar("#abcd"));
+    assert.ok(s1.isInclude_specialChar("ab#cd"));
+    assert.ok(s1.isInclude_specialChar("abcd#"));
+    assert.ok(s1.isInclude_specialChar("ab@dc"));
+    assert.ok(s1.isInclude_specialChar("abd%cde"));
+});
 
+QUnit.test( "isInclude_number", function( assert ) {
+    assert.notOk(s1.isInclude_number("a"));
+    assert.notOk(s1.isInclude_number("ab"));
+    assert.ok(s1.isInclude_number("1"));
+    assert.ok(s1.isInclude_number("2abcd"));
+    assert.ok(s1.isInclude_number("ab3cd"));
+    assert.ok(s1.isInclude_number("abcd4"));
+    assert.ok(s1.isInclude_number("ab5dc"));
+    assert.ok(s1.isInclude_number("abd7cde"));
+});
+
+QUnit.test( "isInclude_abcChar", function( assert ) {
+    assert.notOk(s1.isInclude_abcChar("1"));
+    assert.notOk(s1.isInclude_abcChar("12"));
+    assert.ok(s1.isInclude_abcChar("a"));
+    assert.ok(s1.isInclude_abcChar("a12313#"));
+    assert.ok(s1.isInclude_abcChar("12Z45345"));
+    assert.ok(s1.isInclude_abcChar("43253452g"));
+    assert.ok(s1.isInclude_abcChar("23452c3452345"));
+});
 
 
 
@@ -181,8 +211,11 @@ QUnit.test( "isGoodPW", function( assert ) {
     assert.equal(s1.isGoodPW('daejin', info), s1.ERR_OLD_PW );
     assert.equal(s1.isGoodPW('dae1234jin', info), s1.ERR_INCLIDE_PERSONAL );
     assert.equal(s1.isGoodPW('daeangeljin', info), s1.ERR_INCLIDE_DICT );
-
-
-
+    assert.equal(s1.isGoodPW('daeangejin', info), s1.ERR_NOT_INCLUDE_SPECIAL_CHAR );
+    assert.equal(s1.isGoodPW('daeange#ljin', info), s1.ERR_NOT_INCLUDE_NUMBER );
+    assert.equal(s1.isGoodPW('#1', info), s1.ERR_NOT_INCLUDE_ABC_CHAR );
+    assert.equal(s1.isGoodPW('a#123', info), s1.ERR_INCLUDE_NUM3SEQ );
+    assert.equal(s1.isGoodPW('abc#12', info), s1.ERR_INCLUDE_ABC3SEQ );
+    assert.equal(s1.isGoodPW('daejin#1', info), s1.OK );
 
 });

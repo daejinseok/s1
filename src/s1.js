@@ -167,24 +167,29 @@
         };
     };
 
-    s1.isIncludeSpecialChar = make_isIncludeChar(/[~!\#$^&*\=+|:;?"<,.>']/);
-    s1.isIncludeNumberChar  = make_isIncludeChar(/[\d]/);
-    s1.isIncludeAbcChar     = make_isIncludeChar(/[a-zA-Z]/);
+    s1.isInclude_specialChar = make_isIncludeChar(/[~!@\#$^&*\=+|:;?"<,.>'(){}%]/);
+    s1.isInclude_number      = make_isIncludeChar(/[\d]/);
+    s1.isInclude_abcChar     = make_isIncludeChar(/[a-zA-Z]/);
 
 
     /*
      1. 6개월간 동일하지 않은 패스워드
      2. 개인정보 포함여부
      3. 사전 단어 포함여부
-     4. 3자리 이상 연속된 숫자 또는 문자 제한
      5. 문자, 숫자, 특수문자 조합
+     4. 3자리 이상 연속된 숫자 또는 문자 제한
+
      */
 
-    s1.ERR_OLD_PW = 1;
-    s1.ERR_INCLIDE_PERSONAL = 2;
-    s1.ERR_INCLIDE_DICT = 3;
-    s1.ERR_NOT_INCLUDE_SPCHAR = 4;
-    s1.ERR_NOT_INCLUDE_NUMBER = 4;
+    s1.OK                           = 0;
+    s1.ERR_OLD_PW                   = 1;
+    s1.ERR_INCLIDE_PERSONAL         = 2;
+    s1.ERR_INCLIDE_DICT             = 3;
+    s1.ERR_NOT_INCLUDE_SPECIAL_CHAR = 4;
+    s1.ERR_NOT_INCLUDE_NUMBER       = 5;
+    s1.ERR_NOT_INCLUDE_ABC_CHAR     = 6;
+    s1.ERR_INCLUDE_NUM3SEQ          = 7;
+    s1.ERR_INCLUDE_ABC3SEQ          = 8;
 
     s1.isGoodPW = function( pw, info ){
 
@@ -199,6 +204,28 @@
         if ( s1.deepInclude(pw, info.dict) ){
             return s1.ERR_INCLIDE_DICT;
         }
+
+        if ( !s1.isInclude_specialChar(pw) ){
+            return s1.ERR_NOT_INCLUDE_SPECIAL_CHAR;
+        }
+
+        if ( !s1.isInclude_number(pw) ){
+            return s1.ERR_NOT_INCLUDE_NUMBER;
+        }
+
+        if ( !s1.isInclude_abcChar(pw) ){
+            return s1.ERR_NOT_INCLUDE_ABC_CHAR;
+        }
+
+        if ( s1.isInclude_num3Seq(pw)){
+            return s1.ERR_INCLUDE_NUM3SEQ;
+        }
+
+        if ( s1.isInclude_abc3Seq(pw)){
+            return s1.ERR_INCLUDE_ABC3SEQ;
+        }
+
+        return s1.OK;
     };
 
 })();
