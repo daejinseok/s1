@@ -213,7 +213,7 @@ QUnit.test( "isGoodPW", function( assert ) {
     assert.equal(s1.isGoodPW('daeangeljin', info), s1.ERR_INCLIDE_DICT );
     assert.equal(s1.isGoodPW('daeangejin', info), s1.ERR_NOT_INCLUDE_SPECIAL_CHAR );
     assert.equal(s1.isGoodPW('daeange#ljin', info), s1.ERR_NOT_INCLUDE_NUMBER );
-    assert.equal(s1.isGoodPW('#1', info), s1.ERR_NOT_INCLUDE_ABC_CHAR );
+    assert.equal(s1.isGoodPW('#1a', info), s1.ERR_NOT_INCLUDE_ABC_CHAR );
     assert.equal(s1.isGoodPW('a#123', info), s1.ERR_INCLUDE_NUM3SEQ );
     assert.equal(s1.isGoodPW('abc#12', info), s1.ERR_INCLUDE_ABC3SEQ );
     assert.equal(s1.isGoodPW('daejin#1', info), s1.OK );
