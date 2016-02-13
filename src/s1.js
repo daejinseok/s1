@@ -4,6 +4,8 @@
 
 (function(){
 
+    // root.s1은 underscore.js를 참조했다.
+
     // Establish the root object, `window` (`self`) in the browser, `global`
     // on the server, or `this` in some virtual machines. We use `self`
     // instead of `window` for `WebWorker` support.
@@ -30,8 +32,6 @@
     } else {
         root.s1 = s1;
     }
-
-
 
     s1.randomID = function ( id_size ){
 
@@ -88,13 +88,12 @@
      5. 문자, 숫자, 특수문자 조합
      */
 
-    // 1. 6개월간 동일한 패스워드이면
-    s1.include = function( pw, old_pw_list ){
+    s1.isInclude = function( pw, old_pw_list ){
         return old_pw_list.indexOf(pw) !== -1;
     };
 
-    // 2. 개인정보 포함여부
-    s1.deepInclude = function( pw, pinfo_list ){
+    // todo isInclude와는 인자 순서가 같은 것 같지만, 로직상 반대다!!
+    s1.isDeepInclude = function( pw, pinfo_list ){
 
         for (var idx in pinfo_list ) {
             if ( pw.indexOf(pinfo_list[idx]) !== -1 ) return true;
@@ -154,8 +153,6 @@
         };
     };
 
-    // pw에 3자리 이상 연속된 숫자가 포함되면 true
-    // pw에 3자리 이상 연속된 문자가 포함되면 true
     s1.isInclude_num3Seq = make_isIncludeSeq(/\d\d+/g,             s1.isNum3Seq );
     s1.isInclude_abc3Seq = make_isIncludeSeq(/[a-zA-Z][a-zA-Z]+/g, s1.isAbc3Seq );
 
@@ -178,13 +175,12 @@
      3. 사전 단어 포함여부
      5. 문자, 숫자, 특수문자 조합
      4. 3자리 이상 연속된 숫자 또는 문자 제한
-
      */
 
     s1.OK                           = 0;
     s1.ERR_OLD_PW                   = 1;
-    s1.ERR_INCLIDE_PERSONAL         = 2;
-    s1.ERR_INCLIDE_DICT             = 3;
+    s1.ERR_INCLUDE_PERSONAL         = 2;
+    s1.ERR_INCLUDE_DICT             = 3;
     s1.ERR_NOT_INCLUDE_SPECIAL_CHAR = 4;
     s1.ERR_NOT_INCLUDE_NUMBER       = 5;
     s1.ERR_NOT_INCLUDE_ABC_CHAR     = 6;
@@ -193,16 +189,16 @@
 
     s1.isGoodPW = function( pw, info ){
 
-        if ( s1.include( pw, info.old_pw_list ) ) {
+        if ( s1.isInclude( pw, info.old_pw_list ) ) {
             return s1.ERR_OLD_PW;
         }
 
-        if ( s1.deepInclude(pw, info.p_list) ){
-            return s1.ERR_INCLIDE_PERSONAL;
+        if ( s1.isDeepInclude(pw, info.p_list) ){
+            return s1.ERR_INCLUDE_PERSONAL;
         }
 
-        if ( s1.deepInclude(pw, info.dict) ){
-            return s1.ERR_INCLIDE_DICT;
+        if ( s1.isDeepInclude(pw, info.dict) ){
+            return s1.ERR_INCLUDE_DICT;
         }
 
         if ( !s1.isInclude_specialChar(pw) ){

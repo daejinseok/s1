@@ -12,6 +12,7 @@ QUnit.test( "randomID", function( assert ) {
 
 });
 
+
 QUnit.test( "str2date", function( assert ) {
 
     var date1 = s1.str2Date('2016.02.01');
@@ -23,6 +24,7 @@ QUnit.test( "str2date", function( assert ) {
     assert.deepEqual( date1, date2, date1 );
 
 });
+
 
 QUnit.test( "betweenDays", function( assert ) {
 
@@ -37,23 +39,24 @@ QUnit.test( "betweenDays", function( assert ) {
     assert.equal( s1.betweenDays( date1, date2), 874);
 });
 
-QUnit.test( "include", function( assert ) {
+
+QUnit.test( "isInclude", function( assert ) {
 
     var old_pw_list = ['daejin', 'hana'];
 
-    assert.ok(s1.include("daejin", old_pw_list));
-    assert.ok(s1.include("hana", old_pw_list));
-    assert.notOk(s1.include("hana2", old_pw_list));
+    assert.ok(s1.isInclude("daejin", old_pw_list));
+    assert.ok(s1.isInclude("hana", old_pw_list));
+    assert.notOk(s1.isInclude("hana2", old_pw_list));
 
 });
 
-QUnit.test( "deepInclude", function( assert ) {
+QUnit.test( "isDeepInclude", function( assert ) {
 
     var pinfo_list = ['daejin', 'hana'];
 
-    assert.ok( s1.deepInclude('daejihana', pinfo_list));
-    assert.ok( s1.deepInclude('hana123123', pinfo_list));
-    assert.notOk( s1.deepInclude('daejha', pinfo_list));
+    assert.ok( s1.isDeepInclude('daejihana', pinfo_list));
+    assert.ok( s1.isDeepInclude('hana123123', pinfo_list));
+    assert.notOk( s1.isDeepInclude('daejha', pinfo_list));
 
 });
 
@@ -168,11 +171,11 @@ QUnit.test( "isGoodPW", function( assert ) {
 
 
     /*
-     1. 6개월간 동일하지 않은 패스워드
-     2. 개인정보 포함여부
-     3. 사전 단어 포함여부
-     4. 3자리 이상 연속된 숫자 또는 문자 제한
-     5. 문자, 숫자, 특수문자 조합
+     * 6개월간 같지 않은 패스워드
+     * 개인정보 포함 여부
+     * 사전 단어 포함 여부
+     * 문자, 숫자, 특수문자 조합
+     * 3자리 이상 연속된 숫자 또는 문자 제한
      */
 
     // 지난 패스워드
@@ -209,11 +212,11 @@ QUnit.test( "isGoodPW", function( assert ) {
     };
 
     assert.equal(s1.isGoodPW('daejin', info), s1.ERR_OLD_PW );
-    assert.equal(s1.isGoodPW('dae1234jin', info), s1.ERR_INCLIDE_PERSONAL );
-    assert.equal(s1.isGoodPW('daeangeljin', info), s1.ERR_INCLIDE_DICT );
+    assert.equal(s1.isGoodPW('dae1234jin', info), s1.ERR_INCLUDE_PERSONAL );
+    assert.equal(s1.isGoodPW('daeangeljin', info), s1.ERR_INCLUDE_DICT );
     assert.equal(s1.isGoodPW('daeangejin', info), s1.ERR_NOT_INCLUDE_SPECIAL_CHAR );
     assert.equal(s1.isGoodPW('daeange#ljin', info), s1.ERR_NOT_INCLUDE_NUMBER );
-    assert.equal(s1.isGoodPW('#1a', info), s1.ERR_NOT_INCLUDE_ABC_CHAR );
+    assert.equal(s1.isGoodPW('#1', info), s1.ERR_NOT_INCLUDE_ABC_CHAR );
     assert.equal(s1.isGoodPW('a#123', info), s1.ERR_INCLUDE_NUM3SEQ );
     assert.equal(s1.isGoodPW('abc#12', info), s1.ERR_INCLUDE_ABC3SEQ );
     assert.equal(s1.isGoodPW('daejin#1', info), s1.OK );
