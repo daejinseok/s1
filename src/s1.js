@@ -46,10 +46,9 @@
 
     s1.str2Date = function( str_date ){
 
-        var dot_regex  =/\d{4}\.\d{2}.\d{2}/,
-            dash_regex =/\d{4}\-\d{2}-\d{2}/,
+        var dot_regex  =/^\d{4}\.\d{2}.\d{2}$/,
+            dash_regex =/^\d{4}\-\d{2}-\d{2}$/,
             dateSp;
-
 
         if ( dot_regex.test(str_date) ){
             dateSp = str_date.split('.');
@@ -61,7 +60,7 @@
             return new Date(dateSp[1] + '/' + dateSp[2] + '/' + dateSp[0]);
         }
 
-        return new Date(str_date);
+        return "";
     };
 
 

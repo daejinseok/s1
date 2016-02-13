@@ -5,17 +5,25 @@
 QUnit.test( "randomID", function( assert ) {
 
     var test_id = s1.randomID(8);
-    assert.ok( test_id.match(/[a-z0-9]{8}/), test_id );
+    var regexp  = /^[a-z0-9]{8}$/;
+
+    assert.ok( regexp.test(test_id), test_id );
 
     test_id = s1.randomID(15);
-    assert.ok( test_id.match(/[a-z0-9]{15}/), test_id );
+    regexp  = /^[a-z0-9]{15}$/;
+
+    assert.ok( regexp.test(test_id), test_id );
 
 });
 
 
 QUnit.test( "str2date", function( assert ) {
 
-    var date1 = s1.str2Date('2016.02.01');
+
+    var date1 = s1.str2Date(' 2016.02.01');
+    assert.equal( date1, "", date1 );
+
+    date1 = s1.str2Date('2016.02.01');
     var date2 = new Date('02/01/2016');
     assert.deepEqual( date1, date2, date1 );
 
